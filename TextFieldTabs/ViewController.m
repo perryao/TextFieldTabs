@@ -8,11 +8,15 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
+@interface ViewController () <UITextFieldDelegate>
+@property (weak, nonatomic) IBOutlet UITextField *textField;
 
 @end
 
 @implementation ViewController
+{
+	BOOL tabPressed;
+}
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
@@ -22,6 +26,32 @@
 - (void)didReceiveMemoryWarning {
 	[super didReceiveMemoryWarning];
 	// Dispose of any resources that can be recreated.
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+	return YES;
+}
+
+- (NSArray *)keyCommands
+{
+	NSArray *commands = @[
+						  [UIKeyCommand keyCommandWithInput:@"\t" modifierFlags:0 action:@selector(tabPressed:)]
+						  ];
+	return commands;
+}
+
+- (void)tabPressed:(id)sender
+{
+	NSLog(@"Tab was pressed!");
+	if (self.textField.isFirstResponder) {
+		self.textField.text = [self.textField.text stringByAppendingString:@"    "];
+	}
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+	return YES;
 }
 
 @end
